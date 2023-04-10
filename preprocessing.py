@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 
+housing_indices_dict = {}
+
 def parse_flat_type(s_type):
     if not isinstance(s_type, str):
         return pd.Series((None, None, None))
@@ -13,10 +15,22 @@ def parse_flat_type(s_type):
     else:
         return pd.Series((None, None, None))
 
+def process_year_month(raw):
+    [year, month] = raw.split('-')
+    month = int(month)
+    if 1 <= month and month <= 3:
+        key = year + '-Q1'
+    elif 4 <= month and month <= 6:
+        key = year + '-Q2'
+    elif 7 <= month and month <= 9:
+        key = year + '-Q3'
+    else:
+        key = year + '-Q4'
+    return pd.Series((housing_indices_dict[key], year, month))
+
 def preprocess(df):
-    # process year month
-    df['year'] = df['month'].str.split('-').apply(lambda x:x[0]).astype('int')
-    df['month'] = df['month'].str.split('-').apply(lambda x:x[1]).astype('int')
+    # process year month and housing price index based on year and month
+    df[['price_index', 'year', 'month']] = df['month'].apply(process_year_month)
 
     # flat_type
     df[['num_rooms', 'is_executive', 'is_multi_gen']] = df['flat_type'].apply(parse_flat_type)
@@ -43,15 +57,20 @@ def preprocess(df):
     return df
 
 def main():
+    df = pd.read_csv(
+        'data/gov/housing-and-development-board-resale-price-index-1q2009-100-quarterly.csv')
+    for _, row in df.iterrows():
+        # Use the first column as the key and the second column as the value
+        housing_indices_dict[row['quarter']] = row['index']
     final_columns_train = [
-        'year', 'month', 'num_rooms', 'is_executive', 'is_multi_gen',
+        'price_index', 'year', 'month', 'num_rooms', 'is_executive', 'is_multi_gen',
         'storey_range_avg', 'is_low_floor', 'floor_area_sqm', 'lease_commence_date', 'latitude', 'longitude', 'elevation',
         'town', 'block', 'street_name', 'flat_model', 'subzone', 'planning_area', 'region',
         'cbd_dist', 'nearest_center', 'n_center_dist',
         'resale_price'
     ]
     final_columns_test = [
-        'year', 'month', 'num_rooms', 'is_executive', 'is_multi_gen',
+        'price_index', 'year', 'month', 'num_rooms', 'is_executive', 'is_multi_gen',
         'storey_range_avg', 'is_low_floor', 'floor_area_sqm', 'lease_commence_date', 'latitude', 'longitude', 'elevation',
         'town', 'block', 'street_name', 'flat_model', 'subzone', 'planning_area', 'region',
         'cbd_dist', 'nearest_center', 'n_center_dist'
