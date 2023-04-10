@@ -4,9 +4,9 @@ import haversine as hs
 import csv
 
 output_train_filename = 'data/train_with_location.csv'
-df_train = pd.read_csv('data/train_preprocessed.csv')
+df_train = pd.read_csv('data/train.csv')
 output_test_filename = 'data/test_with_location.csv'
-df_test = pd.read_csv('data/test_preprocessed.csv')
+df_test = pd.read_csv('data/test.csv')
 commerical_centers = []
 with open('data/auxiliary-data/sg-commerical-centres.csv') as f:
   for index, (_, _, lat, long) in enumerate(csv.reader(f)):
@@ -60,7 +60,7 @@ def main():
     df_test[[cbd_dist]] = df_test.apply(
         lambda x: extract_cbd(x.latitude, x.longitude), axis=1)
     print("[1/x] Finished processing CBD")
-    
+
     ## Commerical Centers
     print("[2/x] Started processing sg-commerical-centres")
     df_train[[n_center, n_center_dist]] = df_train.apply(

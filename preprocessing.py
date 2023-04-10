@@ -12,7 +12,6 @@ def parse_flat_type(s_type):
         return pd.Series((0, False, True))
     else:
         return pd.Series((None, None, None))
-    
 
 def preprocess(df):
     # process year month
@@ -29,6 +28,9 @@ def preprocess(df):
     # this range may be accessible by stairs so may be special
     df['is_low_floor'] = df['storey_range_avg'].apply(lambda x: 1 if x < 6 else 0)
 
+    # lease_commence_date
+    # df['lease_commence_date'] = df['lease_commence_date'].apply(lambda x: 2023 - x)
+
     # convert string to categorical variables
     df['town'] = df['town'].astype('category')
     df['block'] = df['block'].astype('category')
@@ -40,22 +42,26 @@ def preprocess(df):
 
     return df
 
+def main():
+    final_columns_train = [
+        'year', 'month', 'num_rooms', 'is_executive', 'is_multi_gen',
+        'storey_range_avg', 'is_low_floor', 'floor_area_sqm', 'lease_commence_date', 'latitude', 'longitude', 'elevation',
+        'town', 'block', 'street_name', 'flat_model', 'subzone', 'planning_area', 'region',
+        'cbd_dist', 'nearest_center', 'n_center_dist',
+        'resale_price'
+    ]
+    final_columns_test = [
+        'year', 'month', 'num_rooms', 'is_executive', 'is_multi_gen',
+        'storey_range_avg', 'is_low_floor', 'floor_area_sqm', 'lease_commence_date', 'latitude', 'longitude', 'elevation',
+        'town', 'block', 'street_name', 'flat_model', 'subzone', 'planning_area', 'region',
+        'cbd_dist', 'nearest_center', 'n_center_dist'
+    ]
+    df = pd.read_csv('data/train_with_location.csv', sep='\t')
+    preprocess(df)[final_columns_train].to_csv(
+        'data/train_preprocessed.csv', index=False, sep='\t')
+    df = pd.read_csv('data/test_with_location.csv', sep='\t')
+    preprocess(df)[final_columns_test].to_csv(
+        'data/test_preprocessed.csv', index=False, sep='\t')
 
-final_columns_train = [
-    'year', 'month', 'num_rooms', 'is_executive', 'is_multi_gen',
-    'storey_range_avg', 'is_low_floor', 'floor_area_sqm', 'lease_commence_date', 'latitude', 'longitude', 'elevation',
-    'town', 'block', 'street_name', 'flat_model', 'subzone', 'planning_area', 'region',
-    'resale_price'
-]
-final_columns_test = [
-    'year', 'month', 'num_rooms', 'is_executive', 'is_multi_gen',
-    'storey_range_avg', 'is_low_floor', 'floor_area_sqm', 'lease_commence_date', 'latitude', 'longitude', 'elevation',
-    'town', 'block', 'street_name', 'flat_model', 'subzone', 'planning_area', 'region'
-]
-
-df = pd.read_csv('data/train.csv')
-preprocess(df)[final_columns_train].to_csv(
-    'data/train_preprocessed.csv', index=False)
-df = pd.read_csv('data/test.csv')
-preprocess(df)[final_columns_test].to_csv(
-    'data/test_preprocessed.csv', index=False)
+if __name__ == "__main__":
+    main()
