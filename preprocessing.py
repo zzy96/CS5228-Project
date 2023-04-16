@@ -28,7 +28,7 @@ def process_year_month(raw):
         key = year + '-Q4'
     return pd.Series((housing_indices_dict[key], year, month))
 
-def preprocess(df):
+def preprocess(df, df_pop = None):
     # process year month and housing price index based on year and month
     df[['price_index', 'year', 'month']] = df['month'].apply(process_year_month)
 
@@ -53,6 +53,12 @@ def preprocess(df):
     df['subzone'] = df['subzone'].astype('category')
     df['planning_area'] = df['planning_area'].astype('category')
     df['region'] = df['region'].astype('category')
+
+    if df_pop is not None:
+        pop_columns = ['pop0', 'pop1', 'pop2', 'pop3', 'pop4', 'pop5', 'pop6', 'pop7', 'pop8',
+                       'pop9', 'pop10', 'pop11', 'pop12', 'pop13', 'pop14', 'pop15', 'pop16', 'pop17', 'pop18']
+        df.drop(columns=pop_columns)
+        return pd.concat([df, df_pop[pop_columns]])
 
     return df
 
@@ -80,11 +86,12 @@ def main():
         'pop0', 'pop1', 'pop2', 'pop3', 'pop4', 'pop5', 'pop6', 'pop7', 'pop8', 'pop9', 'pop10', 'pop11', 'pop12', 'pop13', 'pop14', 'pop15', 'pop16', 'pop17', 'pop18'
     ]
     df = pd.read_csv('data/train_with_location.csv', sep='\t')
-    preprocess(df)[final_columns_train].to_csv(
+    df_pop = pd.read_csv('data/train_with_pop.csv', sep='\t')
+    preprocess(df, df_pop)[final_columns_train].to_csv(
         'data/train_preprocessed.csv', index=False, sep='\t')
-    df = pd.read_csv('data/test_with_location.csv', sep='\t')
-    preprocess(df)[final_columns_test].to_csv(
-        'data/test_preprocessed.csv', index=False, sep='\t')
+    # df = pd.read_csv('data/test_with_location.csv', sep='\t')
+    # preprocess(df)[final_columns_test].to_csv(
+    #     'data/test_preprocessed.csv', index=False, sep='\t')
 
 if __name__ == "__main__":
     main()
