@@ -147,7 +147,7 @@ def main():
     pop_keys = ['pop' + str(x) for x in range(n)]
     # cityhall got no pop data, to sub with central subzone
     missing =  demographic_data['downtown core']['central subzone']
-    df_train[pop_keys] = df_test.apply(
+    df_train[pop_keys] = df_train.apply(
         lambda x: pd.Series(demographic_data[x.planning_area][x.subzone]) if (x.planning_area in demographic_data) and (x.subzone in demographic_data[x.planning_area]) else missing, axis=1)
     df_test[pop_keys] = df_test.apply(
         lambda x: pd.Series(demographic_data[x.planning_area][x.subzone]) if (x.planning_area in demographic_data) and (x.subzone in demographic_data[x.planning_area]) else missing, axis=1)
