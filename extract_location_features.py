@@ -85,59 +85,59 @@ def preprocess_demographic_data():
 def main():
     print("==== Extract Location Features ===")
 
-    ## CBD
-    print("[1/x] Started processing CBD")
-    df_train[[cbd_dist]] = df_train.apply(
-        lambda x: extract_cbd(x.latitude, x.longitude), axis=1)
-    df_test[[cbd_dist]] = df_test.apply(
-        lambda x: extract_cbd(x.latitude, x.longitude), axis=1)
-    print("[1/x] Finished processing CBD")
+    # ## CBD
+    # print("[1/x] Started processing CBD")
+    # df_train[[cbd_dist]] = df_train.apply(
+    #     lambda x: extract_cbd(x.latitude, x.longitude), axis=1)
+    # df_test[[cbd_dist]] = df_test.apply(
+    #     lambda x: extract_cbd(x.latitude, x.longitude), axis=1)
+    # print("[1/x] Finished processing CBD")
 
-    ## Commerical Centers
-    print("[2/x] Started processing sg-commerical-centres")
-    df_train[[n_center, n_center_dist]] = df_train.apply(
-        lambda x: extract_nearest_commerical_center(x.latitude, x.longitude), axis=1)
-    df_test[[n_center, n_center_dist]] = df_test.apply(
-        lambda x: extract_nearest_commerical_center(x.latitude, x.longitude), axis=1)
-    print("[2/x] Finished processing sg-commerical-centres")
+    # ## Commerical Centers
+    # print("[2/x] Started processing sg-commerical-centres")
+    # df_train[[n_center, n_center_dist]] = df_train.apply(
+    #     lambda x: extract_nearest_commerical_center(x.latitude, x.longitude), axis=1)
+    # df_test[[n_center, n_center_dist]] = df_test.apply(
+    #     lambda x: extract_nearest_commerical_center(x.latitude, x.longitude), axis=1)
+    # print("[2/x] Finished processing sg-commerical-centres")
 
-    ## Markets
-    print("[3/x] Started processing markets")
-    df_train[['nearest_markets', 'nearest_markets_dist']] = df_train.apply(
-        lambda x: extract_nearest_location(x.latitude, x.longitude, df_markets), axis=1)
-    df_test[['nearest_markets', 'nearest_markets_dist']] = df_test.apply(
-        lambda x: extract_nearest_location(x.latitude, x.longitude, df_markets), axis=1)
-    print("[3/x] Finished processing markets")    
+    # ## Markets
+    # print("[3/x] Started processing markets")
+    # df_train[['nearest_markets', 'nearest_markets_dist']] = df_train.apply(
+    #     lambda x: extract_nearest_location(x.latitude, x.longitude, df_markets), axis=1)
+    # df_test[['nearest_markets', 'nearest_markets_dist']] = df_test.apply(
+    #     lambda x: extract_nearest_location(x.latitude, x.longitude, df_markets), axis=1)
+    # print("[3/x] Finished processing markets")    
 
-    ## Schools
-    print("[4/x] Started processing df_pri_schools")
-    df_train[['nearest_pri_school', 'nearest_pri_school_dist']] = df_train.apply(
-        lambda x: extract_nearest_location(x.latitude, x.longitude, df_pri_schools), axis=1)
-    df_test[['nearest_pri_school', 'nearest_pri_school_dist']] = df_test.apply(
-        lambda x: extract_nearest_location(x.latitude, x.longitude, df_pri_schools), axis=1)
-    print("[4/x] Finished processing df_pri_schools")  
-    print("[5/x] Started processing df_sec_schools")
-    df_train[['nearest_sec_school', 'nearest_sec_school_dist']] = df_train.apply(
-        lambda x: extract_nearest_location(x.latitude, x.longitude, df_sec_schools), axis=1)
-    df_test[['nearest_sec_school', 'nearest_sec_school_dist']] = df_test.apply(
-        lambda x: extract_nearest_location(x.latitude, x.longitude, df_sec_schools), axis=1)
-    print("[5/x] Finished processing df_sec_schools")      
+    # ## Schools
+    # print("[4/x] Started processing df_pri_schools")
+    # df_train[['nearest_pri_school', 'nearest_pri_school_dist']] = df_train.apply(
+    #     lambda x: extract_nearest_location(x.latitude, x.longitude, df_pri_schools), axis=1)
+    # df_test[['nearest_pri_school', 'nearest_pri_school_dist']] = df_test.apply(
+    #     lambda x: extract_nearest_location(x.latitude, x.longitude, df_pri_schools), axis=1)
+    # print("[4/x] Finished processing df_pri_schools")  
+    # print("[5/x] Started processing df_sec_schools")
+    # df_train[['nearest_sec_school', 'nearest_sec_school_dist']] = df_train.apply(
+    #     lambda x: extract_nearest_location(x.latitude, x.longitude, df_sec_schools), axis=1)
+    # df_test[['nearest_sec_school', 'nearest_sec_school_dist']] = df_test.apply(
+    #     lambda x: extract_nearest_location(x.latitude, x.longitude, df_sec_schools), axis=1)
+    # print("[5/x] Finished processing df_sec_schools")      
     
-    ## Malls
-    print("[6/x] Started processing df_malls")
-    df_train[['nearest_mall', 'nearest_mall_dist']] = df_train.apply(
-        lambda x: extract_nearest_location(x.latitude, x.longitude, df_malls), axis=1)
-    df_test[['nearest_mall', 'nearest_mall_dist']] = df_test.apply(
-        lambda x: extract_nearest_location(x.latitude, x.longitude, df_malls), axis=1)
-    print("[6/x] Finished processing df_malls")       
+    # ## Malls
+    # print("[6/x] Started processing df_malls")
+    # df_train[['nearest_mall', 'nearest_mall_dist']] = df_train.apply(
+    #     lambda x: extract_nearest_location(x.latitude, x.longitude, df_malls), axis=1)
+    # df_test[['nearest_mall', 'nearest_mall_dist']] = df_test.apply(
+    #     lambda x: extract_nearest_location(x.latitude, x.longitude, df_malls), axis=1)
+    # print("[6/x] Finished processing df_malls")       
 
-    ## Trains
-    print("[7/x] Started processing df_train_stations")
-    df_train[['nearest_train_station', 'nearest_train_station_dist']] = df_train.apply(
-        lambda x: extract_nearest_location(x.latitude, x.longitude, df_train_stations), axis=1)
-    df_test[['nearest_train_station', 'nearest_train_station_dist']] = df_test.apply(
-        lambda x: extract_nearest_location(x.latitude, x.longitude, df_train_stations), axis=1)
-    print("[7/x] Finished processing df_train_stations")     
+    # ## Trains
+    # print("[7/x] Started processing df_train_stations")
+    # df_train[['nearest_train_station', 'nearest_train_station_dist']] = df_train.apply(
+    #     lambda x: extract_nearest_location(x.latitude, x.longitude, df_train_stations), axis=1)
+    # df_test[['nearest_train_station', 'nearest_train_station_dist']] = df_test.apply(
+    #     lambda x: extract_nearest_location(x.latitude, x.longitude, df_train_stations), axis=1)
+    # print("[7/x] Finished processing df_train_stations")     
     
     ## Population
     print("[8/x] Started processing sg-population-demographics")
@@ -147,7 +147,7 @@ def main():
     pop_keys = ['pop' + str(x) for x in range(n)]
     # cityhall got no pop data, to sub with central subzone
     missing =  demographic_data['downtown core']['central subzone']
-    df_train[pop_keys] = df_test.apply(
+    df_train[pop_keys] = df_train.apply(
         lambda x: pd.Series(demographic_data[x.planning_area][x.subzone]) if (x.planning_area in demographic_data) and (x.subzone in demographic_data[x.planning_area]) else missing, axis=1)
     df_test[pop_keys] = df_test.apply(
         lambda x: pd.Series(demographic_data[x.planning_area][x.subzone]) if (x.planning_area in demographic_data) and (x.subzone in demographic_data[x.planning_area]) else missing, axis=1)
