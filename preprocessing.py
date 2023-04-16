@@ -67,13 +67,17 @@ def main():
         'storey_range_avg', 'is_low_floor', 'floor_area_sqm', 'lease_commence_date', 'latitude', 'longitude', 'elevation',
         'town', 'block', 'street_name', 'flat_model', 'subzone', 'planning_area', 'region',
         'cbd_dist', 'nearest_center', 'n_center_dist',
+        'nearest_markets', 'nearest_markets_dist', 'nearest_pri_school', 'nearest_pri_school_dist', 'nearest_sec_school', 'nearest_sec_school_dist', 'nearest_mall', 'nearest_mall_dist', 'nearest_train_station', 'nearest_train_station_dist',
+        'pop0', 'pop1', 'pop2', 'pop3', 'pop4', 'pop5', 'pop6', 'pop7', 'pop8', 'pop9', 'pop10', 'pop11', 'pop12', 'pop13', 'pop14', 'pop15', 'pop16', 'pop17', 'pop18',
         'resale_price'
     ]
     final_columns_test = [
         'price_index', 'year', 'month', 'num_rooms', 'is_executive', 'is_multi_gen',
         'storey_range_avg', 'is_low_floor', 'floor_area_sqm', 'lease_commence_date', 'latitude', 'longitude', 'elevation',
         'town', 'block', 'street_name', 'flat_model', 'subzone', 'planning_area', 'region',
-        'cbd_dist', 'nearest_center', 'n_center_dist'
+        'cbd_dist', 'nearest_center', 'n_center_dist',
+        'nearest_markets', 'nearest_markets_dist', 'nearest_pri_school', 'nearest_pri_school_dist', 'nearest_sec_school', 'nearest_sec_school_dist', 'nearest_mall', 'nearest_mall_dist', 'nearest_train_station', 'nearest_train_station_dist',
+        'pop0', 'pop1', 'pop2', 'pop3', 'pop4', 'pop5', 'pop6', 'pop7', 'pop8', 'pop9', 'pop10', 'pop11', 'pop12', 'pop13', 'pop14', 'pop15', 'pop16', 'pop17', 'pop18'
     ]
     df = pd.read_csv('data/train_with_location.csv', sep='\t')
     preprocess(df)[final_columns_train].to_csv(
