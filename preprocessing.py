@@ -57,8 +57,8 @@ def preprocess(df, df_pop = None):
     if df_pop is not None:
         pop_columns = ['pop0', 'pop1', 'pop2', 'pop3', 'pop4', 'pop5', 'pop6', 'pop7', 'pop8',
                        'pop9', 'pop10', 'pop11', 'pop12', 'pop13', 'pop14', 'pop15', 'pop16', 'pop17', 'pop18']
-        df.drop(columns=pop_columns)
-        return pd.concat([df, df_pop[pop_columns]])
+        df = df.drop(columns=pop_columns)
+        return pd.concat([df, df_pop[pop_columns]], axis=1)
 
     return df
 
