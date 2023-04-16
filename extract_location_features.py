@@ -14,7 +14,7 @@ with open('data/auxiliary-data/sg-commerical-centres.csv') as f:
     commerical_centers.append((index, lat, long))
 
 df_markets = pd.read_csv('data/auxiliary-data/sg-gov-markets-hawker-centres.csv')
-df_population = pd.read_csv('data/auxiliary-data/sg-population-demographics.csv')
+# df_population = pd.read_csv('data/auxiliary-data/sg-population-demographics.csv')
 df_pri_schools = pd.read_csv('data/auxiliary-data/sg-primary-schools.csv')
 df_sec_schools = pd.read_csv('data/auxiliary-data/sg-secondary-schools.csv')
 df_malls = pd.read_csv('data/auxiliary-data/sg-shopping-malls.csv')
@@ -62,6 +62,25 @@ def extract_nearest_location(lat, long, locations_df):
 def extract_cbd(lat, long):
   p1 = (float(lat), float(long))
   return pd.Series([dist(p1, (1.2867684143873221, 103.85452859811022))])
+
+def preprocess_demographic_data():
+    age_groups = ['0-4', '5-9', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', '40-44','45-49','50-54','55-59', '60-64', '65-69', '70-74',  '75-79', '80-84', '85+']
+    n = len(age_groups) + 1 # last col for total pop
+    data = {}
+    with open('data/auxiliary-data/sg-population-demographics.csv') as f:
+        for index, (area, subzone, group, _, count) in enumerate(csv.reader(f)):
+            if index == 0:
+                continue
+            # ignore M / F split (not likely to be important
+            if area not in data:
+                data[area] = {}
+            if subzone not in data[area]:
+                data[area][subzone] = [0] * n
+
+            ind = age_groups.index(group)
+            data[area][subzone][ind] += int(count)
+            data[area][subzone][-1] += int(count)
+    return data
 
 def main():
     print("==== Extract Location Features ===")
@@ -120,8 +139,19 @@ def main():
         lambda x: extract_nearest_location(x.latitude, x.longitude, df_train_stations), axis=1)
     print("[7/x] Finished processing df_train_stations")     
     
-    ## Population TODO 
-    
+    ## Population
+    print("[8/x] Started processing sg-population-demographics")
+    # demographic_data['yishun']['nee soon'] => [140, 180, 220, 260, 360, 290, 190, 240, 250, 250, 310, 330, 300, 250, 140, 80, 50, 50]
+    demographic_data = preprocess_demographic_data() 
+    n = 19
+    pop_keys = ['pop' + str(x) for x in range(n)]
+    # cityhall got no pop data, to sub with central subzone
+    missing =  demographic_data['downtown core']['central subzone']
+    df_train[pop_keys] = df_test.apply(
+        lambda x: pd.Series(demographic_data[x.planning_area][x.subzone]) if (x.planning_area in demographic_data) and (x.subzone in demographic_data[x.planning_area]) else missing, axis=1)
+    df_test[pop_keys] = df_test.apply(
+        lambda x: pd.Series(demographic_data[x.planning_area][x.subzone]) if (x.planning_area in demographic_data) and (x.subzone in demographic_data[x.planning_area]) else missing, axis=1)
+    print("[8/x] Finished processing sg-population-demographics")     
 
     write_loc_df_to_file()
 
